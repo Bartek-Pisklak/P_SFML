@@ -1,16 +1,18 @@
 ﻿#include "Plansza.h"
 
 
-
 Plansza::Plansza()
 {
 }
 
-Plansza::Plansza(float posX, float posY,float sizeB, float scaleB)
+Plansza::Plansza(float posX, float posY,float sizeB, float scaleB, short typeBot)
 {
+	this->typeBot = typeBot;
+	enemy = Bot{ linePlayer, typeBot };
 
-	enemy = Bot{ liniePlayer, 1 };
 
+	float x;
+	float y;
 	y = posY;
 	scale = scaleB;
 	size = sizeB;
@@ -23,7 +25,6 @@ Plansza::Plansza(float posX, float posY,float sizeB, float scaleB)
 			plansza[i][j] = ButtonOne(x, y,size,  scale);
 			x += 10 * scale + 15;
 		}
-
 		y += 10 * scale + 15;
 	}
 }
@@ -31,6 +32,15 @@ Plansza::Plansza(float posX, float posY,float sizeB, float scaleB)
 
 Plansza::~Plansza()
 {
+	lineEnemy.clear();
+	linePlayer.clear();
+	for (int i = 0;i < rozmiar;i++)
+	{
+		for (int j = 0; j < rozmiar;j++)
+		{
+			plansza[i][j].~ButtonOne();
+		}
+	}
 }
 
 
@@ -80,23 +90,22 @@ void Plansza::updatePlansza(sf::Vector2f mousePosView)
 						plansza[i][j].setStan(1);
 						plansza[pressButton[0]][pressButton[1]].setStan(1);
 
-						createLine(sf::Vector2i(pressButton[0], pressButton[1]), sf::Vector2i(i, j), liniePlayer);
+						createLine(sf::Vector2i(pressButton[0], pressButton[1]), sf::Vector2i(i, j), linePlayer);
 
 
 						sf::Vector2i beginLineEnemy;
 						sf::Vector2i endLineEnemy;
 
-						enemy.updatePlanszaShadow(liniePlayer, plansza);
-						enemy.droga(linieEnemy,beginLineEnemy,endLineEnemy);
+						enemy.updatePlanszaShadow(linePlayer, plansza);
+						enemy.droga(lineEnemy,beginLineEnemy,endLineEnemy);
 
 						plansza[beginLineEnemy.x][beginLineEnemy.y].setStan(0);
 						plansza[endLineEnemy.x][endLineEnemy.y].setStan(0);
 
-						createLine(beginLineEnemy, endLineEnemy, linieEnemy);
+						createLine(beginLineEnemy, endLineEnemy, lineEnemy);
 
-						for (int i = 0;i < linieEnemy.size();i += 2)
-							cout << linieEnemy[i].x << " " << linieEnemy[i].y << "<>" << linieEnemy[i + 1].x << " " << linieEnemy[i + 1].y << endl;
-
+						for (int i = 0;i < lineEnemy.size();i += 2)
+							cout << lineEnemy[i].x << " " << lineEnemy[i].y << "<>" << lineEnemy[i + 1].x << " " << lineEnemy[i + 1].y << endl;
 
 
 					}
@@ -106,7 +115,7 @@ void Plansza::updatePlansza(sf::Vector2f mousePosView)
 		}
 	}
 
-	// sprawdzanie stanow
+//	sprawdzanie stanow
 	//if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	//{
 	//	cout << "<><>" << change << endl;
@@ -179,8 +188,8 @@ void Plansza::setActiveButton(int x,int y , int a, int b) // i, j, gdzie gora, g
 void Plansza::drawPlansza(sf::RenderWindow* window)
 {
 	using namespace sf;
-	lineDraw(window, liniePlayer);
-	lineDraw(window, linieEnemy);
+	lineDraw(window, linePlayer);
+	lineDraw(window, lineEnemy);
 
 
 		for (int i = 0;i < rozmiar;i++)
@@ -196,7 +205,14 @@ void Plansza::drawPlansza(sf::RenderWindow* window)
 
 void Plansza::lineWin()
 {
+	bool beginEnemy = false;
+	bool lineEnemy = false;
+	bool endEnemy;
+	//for (int i = 0;i < lineEnemy.size();i++)
+	//{
 
+
+	//}
 }
 
 void Plansza::lineDraw(sf::RenderWindow* window, std::vector <sf::Vector2i> linia)
@@ -241,8 +257,8 @@ void Plansza::createLine(ButtonOne first, ButtonOne second)
 	sf::Vector2f poczatek = (sf::Vector2f(first.getX(), first.getY()));
 	sf::Vector2f koniec = (sf::Vector2f(second.getX(), second.getY()));
 
-	liniePlayer.push_back(poczatek);
-	liniePlayer.push_back(koniec);
+	linePlayer.push_back(poczatek);
+	linePlayer.push_back(koniec);
 }
 
 bool Plansza::checkLine(sf::Vector2i first, sf::Vector2i second)
@@ -252,10 +268,10 @@ bool Plansza::checkLine(sf::Vector2i first, sf::Vector2i second)
 	sf::Vector2f A = (sf::Vector2f(guzik1.getX(), guzik1.getY()));
 	sf::Vector2f B = (sf::Vector2f(guzik2.getX(), guzik2.getY()));
 
-	for (int i = 0;i < liniePlayer.size();i += 2)
+	for (int i = 0;i < linePlayer.size();i += 2)
 	{
-		sf::Vector2f C = liniePlayer[i];
-		sf::Vector2f D = liniePlayer[1 + i];
+		sf::Vector2f C = linePlayer[i];
+		sf::Vector2f D = linePlayer[1 + i];
 
 		float	v1 = iloczyn_wektorowy(C, D, A);
 		float	v2 = iloczyn_wektorowy(C, D, B);
@@ -271,10 +287,10 @@ bool Plansza::checkLine(sf::Vector2i first, sf::Vector2i second)
 		}
 	}
 
-	for (int i = 0;i < linieEnemy.size();i++)
+	for (int i = 0;i < lineEnemy.size();i++)
 	{
-		sf::Vector2f C = linieEnemy[i];
-		sf::Vector2f D = linieEnemy[1 + i];
+		sf::Vector2f C = lineEnemy[i];
+		sf::Vector2f D = lineEnemy[1 + i];
 
 		float	v1 = iloczyn_wektorowy(C, D, A);
 		float	v2 = iloczyn_wektorowy(C, D, B);
@@ -284,7 +300,7 @@ bool Plansza::checkLine(sf::Vector2i first, sf::Vector2i second)
 		if (v1 * v2 < 0 && v3 * v4 < 0)
 			return true;
 
-		if (B == linieEnemy[i])
+		if (B == lineEnemy[i])
 			return true;
 	}
 

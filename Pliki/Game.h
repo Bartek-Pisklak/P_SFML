@@ -23,7 +23,7 @@ private:
 	// Game obcjets	
 	Plansza plansza;
 
-
+	short typeBot;
 
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;

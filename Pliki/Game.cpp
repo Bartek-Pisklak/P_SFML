@@ -3,10 +3,11 @@
 using namespace sf;
 Game::Game()
 {
+	typeBot = 1;
 	this->initializeVariebles();
 	this->initWindow();
 
-	plansza = Plansza{ 10.f, 10.f, 5.f, 2.f};
+	plansza = Plansza{ 10.f, 10.f, 5.f, 2.f,typeBot};
 }
 
 Game::~Game()

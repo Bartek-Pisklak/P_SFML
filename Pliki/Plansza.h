@@ -14,13 +14,14 @@ class Plansza : Line // X, Y, Size, Scale // maybe window
 {
 private:
 
-	float x;
-	float y;
+	short typeBot;
+
+
 	float scale;
 	float size;
 
 
-	ButtonOne plansza[rozmiar][rozmiar];
+	ButtonOne plansza[rozmiar][rozmiar]{};
 
 	int pressButton[2];
 
@@ -45,7 +46,7 @@ public:
 
 
 	Plansza();
-	Plansza(float posX,float posY,float size, float scaleB);
+	Plansza(float posX,float posY,float size, float scaleB, short typeBot=1);
 	~Plansza();
 
 

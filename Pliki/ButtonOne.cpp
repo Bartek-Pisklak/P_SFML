@@ -54,6 +54,7 @@ void ButtonOne::initObcject()
 
 ButtonOne::~ButtonOne()
 {
+	this->button.setOutlineColor(sf::Color::Transparent);
 	active = false;
 	press = false;
 	isPlayer = false;

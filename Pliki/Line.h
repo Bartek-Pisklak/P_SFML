@@ -7,8 +7,8 @@ class Line
 {
 	protected:
 
-	std::vector <sf::Vector2i> liniePlayer;
-	std::vector <sf::Vector2i> linieEnemy;
+	std::vector <sf::Vector2i> linePlayer;
+	std::vector <sf::Vector2i> lineEnemy;
 
 public:
 

@@ -3,10 +3,10 @@
 bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
 {
 
-	for (int i = 0;i < liniePlayer.size();i += 2)
+	for (int i = 0;i < linePlayer.size();i += 2)
 	{
-		sf::Vector2i C = liniePlayer[i];
-		sf::Vector2i D = liniePlayer[1 + i];
+		sf::Vector2i C = linePlayer[i];
+		sf::Vector2i D = linePlayer[1 + i];
 
 		float	v1 = iloczyn_wektorowy(C, D, A);
 		float	v2 = iloczyn_wektorowy(C, D, B);
@@ -22,10 +22,10 @@ bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
 		}
 	}
 
-	for (int i = 0;i < linieEnemy.size() && linieEnemy.size() >= 2;i +=2)
+	for (int i = 0; i < lineEnemy.size() && lineEnemy.size() >= 2;i +=2)
 	{
-		sf::Vector2i C = linieEnemy[i];
-		sf::Vector2i D = linieEnemy[1 + i];
+		sf::Vector2i C = lineEnemy[i];
+		sf::Vector2i D = lineEnemy[1 + i];
 
 		float	v1 = iloczyn_wektorowy(C, D, A);
 		float	v2 = iloczyn_wektorowy(C, D, B);
@@ -35,8 +35,10 @@ bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
 		if (v1 * v2 < 0 && v3 * v4 < 0)
 			return true;
 
-		if (B == linieEnemy[i])
+		if (A == C && B == D || A == D && B == C)
+		{
 			return true;
+		}
 	}
 	return false;
 }

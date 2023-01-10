@@ -19,19 +19,20 @@ private:
 
 
 	int planszaShadow[rozmiar][rozmiar];
+
+
+
+	bool isDouble(std::vector <sf::Vector2i> roadCopy, std::vector <sf::Vector2i>& pointBeen, int x, int y);
+	void createFastDroga(int x, int y);
+	void graf(bool& wstawil, std::vector <sf::Vector2i>& roadCopy, std::vector <sf::Vector2i>& pointBeen, int& x, int& y, int zmiennaX, int zmiennaY);
+
 public:
 
 	Bot();
-	Bot(std::vector <sf::Vector2i>& liniePlayer, int typ);
+	Bot(std::vector <sf::Vector2i>& linePlayer, int typ);
 	~Bot();
 
-	void updatePlanszaShadow(std::vector <sf::Vector2i>& liniePlayer, ButtonOne plansza[][rozmiar]);
-	void droga(std::vector<sf::Vector2i> linieEnemyCurrent, sf::Vector2i& begin, sf::Vector2i& end);
-	void normalLVL();
-
-
-	void createFastDroga(int x,int y);
-	void graf(bool& wstawil, std::vector <sf::Vector2i>& trasaKopia, int& x, int& y, int zmiennaX, int zmiennaY);
-
+	void updatePlanszaShadow(std::vector <sf::Vector2i>& linePlayer, ButtonOne plansza[][rozmiar]);
+	void droga(std::vector<sf::Vector2i> lineEnemyCurrent, sf::Vector2i& begin, sf::Vector2i& end);
 };
 
