@@ -52,7 +52,7 @@ public:
 
 	//dla dzialania obiektu
 
-	void setLock(bool whatLock=false);
+	void setLock(bool locking);
 	void setStan(int nowy);
 
 	short getStan();

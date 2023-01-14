@@ -7,7 +7,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
-#include "Plansza.h"
+#include "ButtonBoard.h"
 
 class Game
 {
@@ -21,7 +21,7 @@ private:
 	sf::Color colorbackground;
 
 	// Game obcjets	
-	Plansza plansza;
+	ButtonBoard buttonBoard;
 
 	short typeBot;
 
@@ -33,7 +33,7 @@ private:
 
 public:
 
-	void drawPlansza();
+	void drawbuttonBoard();
 
 	void pollEvents();
 	void update();

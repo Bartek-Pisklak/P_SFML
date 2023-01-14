@@ -24,7 +24,7 @@
     <ClInclude Include="Pliki\Game.h" />
     <ClInclude Include="Pliki\Line.h" />
     <ClInclude Include="Pliki\Menu.h" />
-    <ClInclude Include="Pliki\Plansza.h" />
+    <ClInclude Include="Pliki\ButtonBoard.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pliki\Bot.cpp" />
@@ -33,7 +33,7 @@
     <ClCompile Include="Pliki\Line.cpp" />
     <ClCompile Include="Pliki\main.cpp" />
     <ClCompile Include="Pliki\Menu.cpp" />
-    <ClCompile Include="Pliki\Plansza.cpp" />
+    <ClCompile Include="Pliki\ButtonBoard.cpp" />
     <ClCompile Include="Trash_Maybe.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -47,7 +47,7 @@ void ButtonOne::initObcject()
 	this->button.setPosition(this->centerX,this->centerY);
 	this->button.setScale(sf::Vector2f(this->scale, this->scale));
 	this->button.setFillColor(defaultColor);
-	this->button.setOutlineColor(sf::Color::Transparent); // maybe kolor tła
+	this->button.setOutlineColor(sf::Color::Transparent); 
 	button.setOutlineThickness(2);
 }
 
@@ -149,8 +149,6 @@ void ButtonOne::setLock(bool whatLock)
 			isLock = false;
 		}
 	}
-
-
 	if (isEnemy)
 		isLock = true;
 }
@@ -167,7 +165,6 @@ void ButtonOne::setStan(int nowy)
 
 	if (!isLock)
 	{
-		// breakuje graczy
 		if (!press && !active)
 		{
 			stan = nowy;
@@ -206,20 +203,15 @@ bool ButtonOne::getEnemy()
 	return isEnemy;
 }
 
-
-
 sf::Color ButtonOne::getColor()
 {
 	return color;
 }
 
-
-
 short ButtonOne::getStan()
 {
 	return stan;
 }
-
 
 bool ButtonOne::getLock() const
 {

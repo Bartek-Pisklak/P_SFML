@@ -1,30 +1,28 @@
 #pragma once
 #include"ButtonOne.h"
 #include"Line.h"
+
+
 #include <iostream>
 #include <vector>
 #include <ctime>
-
-# define rozmiar 24
 
 
 class Bot : Line
 {
 private:
 	int whatBot;
-
-	sf::Vector2f whereStart;
-
 	std::vector <sf::Vector2i> roadPoints;
+	std::vector < std::vector <sf::Vector2i>> *pointBeRoadCopy;
+
+	int buttonBoardShadow[MUCHBUTTON][MUCHBUTTON];
+
+	int stepHorse[2][8] = {{ 2,2,1,1,-1,-1,-2,-2 },{-1, 1, -2, 2, -2, 2, -1, 1}};
 
 
-	int planszaShadow[rozmiar][rozmiar];
-
-
-
-	bool isDouble(std::vector <sf::Vector2i> roadCopy, std::vector <sf::Vector2i>& pointBeen, int x, int y);
-	void createFastDroga(int x, int y);
-	void graf(bool& wstawil, std::vector <sf::Vector2i>& roadCopy, std::vector <sf::Vector2i>& pointBeen, int& x, int& y, int zmiennaX, int zmiennaY);
+	bool isDouble(std::vector <sf::Vector2i> roadCopy, int x, int y);
+	void createFastRoad(int x, int y);
+	void graf(bool& wstawil, std::vector <sf::Vector2i>& roadCopy, std::vector < std::vector <sf::Vector2i>>& pointBeRoad, int& x, int& y, int zmiennaX, int zmiennaY);
 
 public:
 
@@ -32,7 +30,7 @@ public:
 	Bot(std::vector <sf::Vector2i>& linePlayer, int typ);
 	~Bot();
 
-	void updatePlanszaShadow(std::vector <sf::Vector2i>& linePlayer, ButtonOne plansza[][rozmiar]);
-	void droga(std::vector<sf::Vector2i> lineEnemyCurrent, sf::Vector2i& begin, sf::Vector2i& end);
+	void updateButtonBoardShadow(std::vector <sf::Vector2i>& linePlayer, ButtonOne buttonBoard[][MUCHBUTTON]);
+	void roadCreate(std::vector<sf::Vector2i> lineEnemyCurrent, sf::Vector2i& begin, sf::Vector2i& end);
 };
 

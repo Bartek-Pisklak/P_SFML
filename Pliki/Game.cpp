@@ -7,7 +7,7 @@ Game::Game()
 	this->initializeVariebles();
 	this->initWindow();
 
-	plansza = Plansza{ 10.f, 10.f, 5.f, 2.f,typeBot};
+	buttonBoard = ButtonBoard{ 10.f, 10.f, 5.f, 2.f,typeBot};
 }
 
 Game::~Game()
@@ -35,7 +35,7 @@ void Game::initWindow()
 
 
 
-void Game::drawPlansza()
+void Game::drawbuttonBoard()
 {
 	
 }
@@ -54,7 +54,7 @@ void Game::pollEvents()
 
 			// to jest lepsze mniej zacina klikanie
 		case Event::MouseButtonPressed:
-			plansza.updatePlansza(mousePosView);
+			buttonBoard.updateButtonBoard(mousePosView);
 			break;
 
 		default:
@@ -71,7 +71,7 @@ void Game::update()
 
 	this->updateMousePosition();
 
-	//	plansza.updatePlansza(mousePosView);
+	//	buttonBoard.updatebuttonBoard(mousePosView);
 
 }
 
@@ -79,7 +79,7 @@ void Game::render()
 {
 	this->window->clear(colorbackground);
 	
-	plansza.drawPlansza(this->window);
+	buttonBoard.drawButtonBoard(this->window);
 
 
 	// Draw game obcjets

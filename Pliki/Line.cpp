@@ -8,10 +8,10 @@ bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
 		sf::Vector2i C = linePlayer[i];
 		sf::Vector2i D = linePlayer[1 + i];
 
-		float	v1 = iloczyn_wektorowy(C, D, A);
-		float	v2 = iloczyn_wektorowy(C, D, B);
-		float	v3 = iloczyn_wektorowy(A, B, C);
-		float	v4 = iloczyn_wektorowy(A, B, D);
+		float	v1 = vector_product(C, D, A);
+		float	v2 = vector_product(C, D, B);
+		float	v3 = vector_product(A, B, C);
+		float	v4 = vector_product(A, B, D);
 
 		if (v1 * v2 < 0 && v3 * v4 < 0)
 			return true;
@@ -22,28 +22,26 @@ bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
 		}
 	}
 
-	for (int i = 0; i < lineEnemy.size() && lineEnemy.size() >= 2;i +=2)
+	for (int i = 0;i < lineEnemy.size() && lineEnemy.size() >= 2;i += 2)
 	{
 		sf::Vector2i C = lineEnemy[i];
 		sf::Vector2i D = lineEnemy[1 + i];
 
-		float	v1 = iloczyn_wektorowy(C, D, A);
-		float	v2 = iloczyn_wektorowy(C, D, B);
-		float	v3 = iloczyn_wektorowy(A, B, C);
-		float	v4 = iloczyn_wektorowy(A, B, D);
+		float	v1 = vector_product(C, D, A);
+		float	v2 = vector_product(C, D, B);
+		float	v3 = vector_product(A, B, C);
+		float	v4 = vector_product(A, B, D);
 
 		if (v1 * v2 < 0 && v3 * v4 < 0)
 			return true;
 
 		if (A == C && B == D || A == D && B == C)
-		{
 			return true;
-		}
 	}
 	return false;
 }
 
-float Line::iloczyn_wektorowy(sf::Vector2i X, sf::Vector2i Y, sf::Vector2i Z)
+float Line::vector_product(sf::Vector2i X, sf::Vector2i Y, sf::Vector2i Z)
 {
 	float x1 = Z.x - X.x;
 	float y1 = Z.y - X.y;
