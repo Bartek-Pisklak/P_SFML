@@ -48,10 +48,6 @@ void Bot::updateButtonBoardShadow(std::vector <sf::Vector2i>& linePlayer, Button
 	}
 
 	this->linePlayer = linePlayer;
-	for (int i = 0;i < this->linePlayer.size();i++)
-	{
-		std::cout << this->linePlayer[i].x << " >< " << this->linePlayer[i].y << std::endl;
-	}
 }
 
 void Bot::roadCreate(std::vector<sf::Vector2i> lineEnemyCurrent, sf::Vector2i& begin, sf::Vector2i& end)
@@ -162,7 +158,6 @@ void Bot::graf(bool& wstawil, std::vector <sf::Vector2i>& roadCopy, std::vector 
 						pointBeRoad.push_back(helpRoad);
 					}
 				}
-				
 			}
 		}
 	}

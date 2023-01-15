@@ -34,7 +34,6 @@
     <ClCompile Include="Pliki\main.cpp" />
     <ClCompile Include="Pliki\Menu.cpp" />
     <ClCompile Include="Pliki\ButtonBoard.cpp" />
-    <ClCompile Include="Trash_Maybe.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -7,7 +7,6 @@ ButtonBoard::ButtonBoard()
 
 ButtonBoard::ButtonBoard(float posX, float posY,float sizeB, float scaleB, short typeBot)
 {
-	font.loadFromFile("arial.ttf");
 	this->typeBot = typeBot;
 	enemy = Bot{ linePlayer,this->typeBot };
 
@@ -28,6 +27,8 @@ ButtonBoard::ButtonBoard(float posX, float posY,float sizeB, float scaleB, short
 		}
 		y += 10 * scale + 15;
 	}
+
+	initText();
 }
 
 
@@ -42,6 +43,9 @@ ButtonBoard::~ButtonBoard()
 			buttonBoard[i][j].~ButtonOne();
 		}
 	}
+	winPlayer = false;
+	winEnemy = false;
+	klik = false;
 }
 
 
@@ -112,19 +116,6 @@ void ButtonBoard::updateButtonBoard(sf::Vector2f mousePosView)
 			}
 		}
 	}
-	else
-	{
-		if(winPlayer)
-			textWin.setString("Wygral Gracz");
-		if(winEnemy)
-			textWin.setString("Wygral Przeciwnik Bot");
-
-		textWin.setCharacterSize(24);
-		textWin.setFillColor(sf::Color::Red);
-		textWin.setPosition(200.f, 200.f);
-		textWin.setStyle(sf::Text::Bold);
-		textWin.setFont(font);
-	}
 
 }
 
@@ -150,8 +141,6 @@ void ButtonBoard::setActiveButton(int x,int y , int a, int b) // i, j, gdzie gor
 void ButtonBoard::drawButtonBoard(sf::RenderWindow* window)
 {
 	using namespace sf;
-	lineDraw(window, linePlayer);
-	lineDraw(window, lineEnemy);
 
 	for (int i = 0;i < MUCHBUTTON;i++)
 	{
@@ -160,24 +149,26 @@ void ButtonBoard::drawButtonBoard(sf::RenderWindow* window)
 			window->draw(buttonBoard[i][j].getButton());
 			buttonBoard[i][j].changeColor();
 		}
-	}
+	}	
+
+	lineDraw(window, linePlayer);
+	lineDraw(window, lineEnemy);
 
 	if (winPlayer || winEnemy)
 	{
 		window->draw(textWin);
 	}
 
-	if(linePlayer.size()>2) //ale ma być 10
-		lineWin();
+	if (lineEnemy.size() > 10)
+	{
+		whoWinCreateWin();
 
-	//cout << linePlayer.size() << endl;
-	//for (int i = 0;i < linePlayer.size();i+=2)
-	//{
-	//	cout << "x" << linePlayer[i].x << endl;;
-
-	//}
-	//cout << "<><><><><>" << endl;
+		if (!winPlayer && !winEnemy)
+			if (lineEnemy.size() > 10)
+				lineWin();
+	}
 }
+
 
 
 void ButtonBoard::lineWin()
@@ -189,8 +180,7 @@ void ButtonBoard::lineWin()
 	//sort(linePlayer, true);
 	//for (int i = 0;i < linePlayer.size() && linePlayer[0].x == 0;i++)
 	//{
-	//	cout << "x" << linePlayer[i].x;
-
+	//	cout << "x" << linePlayer[i].x;	
 	//}
 	//sort(linePlayer, false);
 	//for (int i = 0;i < linePlayer.size() && linePlayer[0].y == 0;i++)
@@ -277,10 +267,6 @@ void ButtonBoard::gameRun(bool& change, int i, int j)
 
 		createLine(beginLineEnemy, endLineEnemy, lineEnemy);
 
-		for (int i = 0;i < lineEnemy.size();i += 2)
-			cout << lineEnemy[i].x << " " << lineEnemy[i].y << "<>" << lineEnemy[i + 1].x << " " << lineEnemy[i + 1].y << endl;
-
-
 	}
 }
 
@@ -326,3 +312,28 @@ void ButtonBoard::sort(std::vector<sf::Vector2i>& line, bool xy)
 		}
 	}
 }
+
+
+void ButtonBoard::initText()
+{
+	if (!font.loadFromFile("arial.ttf"))
+	{
+		cout << "nie ma czcionki" << endl;
+	}
+
+	textWin.setPosition(150, 350);
+	textWin.setCharacterSize(80);
+	textWin.setStyle(sf::Text::Bold);
+}
+
+void ButtonBoard::whoWinCreateWin()
+{
+	if (winPlayer)
+		textWin.setString("Wygral Gracz");
+	if (winEnemy)
+		textWin.setString("Wygral Przeciwnik");
+
+	textWin.setFont(font);
+	textWin.setFillColor(sf::Color::Yellow);
+}
+

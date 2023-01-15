@@ -50,9 +50,6 @@
     <ClCompile Include="Pliki\ButtonBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Trash_Maybe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Pliki\Bot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -17,6 +17,7 @@ private:
 	float scale;
 	float size;
 	int pressButton[2];
+	
 	sf::Font font;
 	sf::Text textWin;
 
@@ -32,6 +33,8 @@ private:
 	void lineDraw(sf::RenderWindow* window, std::vector <sf::Vector2i> line);
 	void gameRun(bool &change, int i , int j);
 	void sort(std::vector<sf::Vector2i> &line, bool xy);
+	void initText();
+	void whoWinCreateWin();
 
 public:
 
