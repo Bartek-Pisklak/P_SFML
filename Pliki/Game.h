@@ -20,7 +20,11 @@ private:
 
 	short typeBot;
 	// Game obcjets	
-	ButtonBoard buttonBoard;
+	ButtonBoard buttonBoard{};
+
+	sf::Vector2i mousePosWindow;
+	sf::Vector2f mousePosView;
+
 
 	sf::Font font;
 	sf::RectangleShape buttonRestart;
@@ -28,24 +32,19 @@ private:
 	sf::Text textButtonRestart;
 	sf::Text textButtonClose;
 
-	sf::Vector2i mousePosWindow;
-	sf::Vector2f mousePosView;
-
 	void initializeVariebles();
 	void initWindow();
 
 	void initButton();
 	void drawButton();
+	void clickButtonMenu();
 
 public:
-
 
 	void pollEvents();
 	void update();
 	void render();
 	void updateMousePosition();
-
-
 
 	// Accessors
 	const bool running() const;
