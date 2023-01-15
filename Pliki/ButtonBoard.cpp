@@ -126,12 +126,16 @@ void ButtonBoard::setActiveButton(int x,int y , int a, int b) // i, j, gdzie gor
 		if ((y - b) >= 0)
 		{
 			if (buttonBoard[x - a][y - b].getEnemy() == false)
+			{
 				buttonBoard[x - a][y - b].setStan(4);
+			}
 		}
 		if ((y + b) < MUCHBUTTON)
 		{
 			if (buttonBoard[x - a][y - b].getEnemy() == false)
+			{
 				buttonBoard[x - a][y + b].setStan(4);
+			}
 		}
 	}
 	return;

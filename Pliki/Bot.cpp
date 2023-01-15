@@ -66,6 +66,7 @@ void Bot::createFastRoad(int x,int y)
 	std::vector < std::vector <sf::Vector2i>> *pointBeRoad;
 	pointBeRoad = new std::vector < std::vector <sf::Vector2i>>[8];
 
+	bool whereGo[4] = {1,0,0,0};//S N W E
 
 	std::vector <sf::Vector2i> road;
 	road.push_back(sf::Vector2i(x, y));
@@ -74,22 +75,43 @@ void Bot::createFastRoad(int x,int y)
 	int howMuchImustGoBack = 0;
 	int loop = 0;
 
-	while (lineEnemy[0].x == 0 && x != 23 )//|| lineEnemy[0].y == 0 && y != 23
+	while (lineEnemy[0].x == 0 && x != 23 || lineEnemy[0].y == 0 && y != 23 )
 	{
 		bool wstawil = false;
 
-		for (int i = 0;i < 8;i++)
+		if (whereGo[0])
 		{
-			graf(wstawil, road, pointBeRoad[i], x, y, stepHorse[0][i], stepHorse[1][i]);
+			for (int i = 0;i < 8;i++)
+			{
+				graf(wstawil, road, pointBeRoad[i], x, y, stepHorseNS[0][i], stepHorseNS[1][i]);
+			}
+		}
+		else if (whereGo[1])
+		{
+			int k = 0;
+			for (int i = 8;i > 0;i--)
+			{
+				graf(wstawil, road, pointBeRoad[k], x, y, stepHorseNS[0][i], stepHorseNS[1][i]);
+				k++;
+			}
+		}
+		else if (whereGo[2])
+		{
+			for (int i = 0;i < 8;i++)
+			{
+				graf(wstawil, road, pointBeRoad[i], x, y, stepHorseWE[0][i], stepHorseWE[1][i]);
+			}
+		}
+		else if (whereGo[3])
+		{
+			int k = 0;
+			for (int i = 8;i > 0;i--)
+			{
+				graf(wstawil, road, pointBeRoad[k], x, y, stepHorseWE[0][i], stepHorseWE[1][i]);
+				k++;
+			}
 		}
 
-		//graf(wstawil, road , pointBeRoad, x, y, 2, 1);
-		//graf(wstawil, road , pointBeRoad, x, y, 1, -2);
-		//graf(wstawil, road , pointBeRoad, x, y, 1, 2);
-		//graf(wstawil, road, pointBeRoad, x, y, -1, -2);
-		//graf(wstawil, road, pointBeRoad, x, y, -1, 2);
-		//graf(wstawil, road, pointBeRoad, x, y, -2, -1);
-		//graf(wstawil, road, pointBeRoad, x, y, -2, 1);
 
 		if (!wstawil)
 		{

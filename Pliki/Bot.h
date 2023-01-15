@@ -17,8 +17,8 @@ private:
 
 	int buttonBoardShadow[MUCHBUTTON][MUCHBUTTON];
 
-	int stepHorse[2][8] = {{ 2,2,1,1,-1,-1,-2,-2 },{-1, 1, -2, 2, -2, 2, -1, 1}};
-
+	int stepHorseNS[2][8] = {{ 2,2,1,1,-1,-1,-2,-2 },{-1, 1, -2, 2, -2, 2, -1, 1}};
+	int stepHorseWE[2][8] = {{ -1,1,-2,2,-2,2,-1,1 },{2, 2, 1, 1, -1, -1, -2, -2}};
 
 	bool isDouble(std::vector <sf::Vector2i> roadCopy, int x, int y);
 	void createFastRoad(int x, int y);
