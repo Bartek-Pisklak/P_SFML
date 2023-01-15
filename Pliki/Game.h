@@ -12,18 +12,21 @@
 class Game
 {
 private:
-	// variable
-	// window
+
 	sf::RenderWindow* window;
 	sf::Event ev;
 	sf::VideoMode videoMode;
-
 	sf::Color colorbackground;
 
+	short typeBot;
 	// Game obcjets	
 	ButtonBoard buttonBoard;
 
-	short typeBot;
+	sf::Font font;
+	sf::RectangleShape buttonRestart;
+	sf::RectangleShape buttonClose;
+	sf::Text textButtonRestart;
+	sf::Text textButtonClose;
 
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
@@ -31,9 +34,11 @@ private:
 	void initializeVariebles();
 	void initWindow();
 
+	void initButton();
+	void drawButton();
+
 public:
 
-	void drawbuttonBoard();
 
 	void pollEvents();
 	void update();

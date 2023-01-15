@@ -6,6 +6,7 @@ Game::Game()
 	typeBot = 1;
 	this->initializeVariebles();
 	this->initWindow();
+	this->initButton();
 
 	buttonBoard = ButtonBoard{ 10.f, 10.f, 5.f, 2.f,typeBot};
 }
@@ -35,9 +36,44 @@ void Game::initWindow()
 
 
 
-void Game::drawbuttonBoard()
+void Game::drawButton()
 {
-	
+	window->draw(buttonRestart);
+	window->draw(buttonClose);
+	window->draw(textButtonRestart);
+	window->draw(textButtonClose);
+}
+
+void Game::initButton()
+{
+	buttonRestart.setPosition(875, 300);
+	buttonRestart.setSize(sf::Vector2f(300,50));
+	buttonRestart.setFillColor(sf::Color::Cyan);
+
+	buttonClose.setPosition(875, 400);
+	buttonClose.setSize(sf::Vector2f(300,50));
+	buttonClose.setFillColor(sf::Color::Cyan);
+
+	if (!font.loadFromFile("arial.ttf"))
+	{
+		std::cout << "nie ma czcionki" << std::endl;
+	}
+
+	textButtonRestart.setString("Restart");
+	textButtonRestart.setPosition(950, 300);
+	textButtonRestart.setCharacterSize(40);
+	textButtonRestart.setStyle(sf::Text::Bold);
+	textButtonRestart.setFont(font);
+	textButtonRestart.setFillColor(sf::Color::Black);
+
+	textButtonClose.setString("Zamknij");
+	textButtonClose.setPosition(950, 400);
+	textButtonClose.setCharacterSize(40);
+	textButtonClose.setStyle(sf::Text::Bold);
+	textButtonClose.setFont(font);
+	textButtonClose.setFillColor(sf::Color::Black);
+
+
 }
 
 void Game::pollEvents()
@@ -52,9 +88,9 @@ void Game::pollEvents()
 			this->window->close();
 			break;
 
-			// to jest lepsze mniej zacina klikanie
 		case Event::MouseButtonPressed:
 			buttonBoard.updateButtonBoard(mousePosView);
+
 			break;
 
 		default:
@@ -71,7 +107,6 @@ void Game::update()
 
 	this->updateMousePosition();
 
-	//	buttonBoard.updatebuttonBoard(mousePosView);
 
 }
 
@@ -80,7 +115,7 @@ void Game::render()
 	this->window->clear(colorbackground);
 	
 	buttonBoard.drawButtonBoard(this->window);
-
+	drawButton();
 
 	// Draw game obcjets
 	this->window->display();
