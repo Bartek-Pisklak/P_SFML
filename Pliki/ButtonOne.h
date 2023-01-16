@@ -28,7 +28,7 @@ private:
 	bool isEnemy;
 	bool isLock;
 
-	short stan= 99;
+	short stan;
 
 	// kolor
 	sf::Color color;

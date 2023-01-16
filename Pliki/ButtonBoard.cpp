@@ -9,7 +9,8 @@ ButtonBoard::ButtonBoard(float posX, float posY,float sizeB, float scaleB, short
 {
 	this->typeBot = typeBot;
 	enemy = Bot{ linePlayer,this->typeBot };
-
+	float scale;
+	float size;
 
 	float x;
 	float y;

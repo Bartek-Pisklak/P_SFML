@@ -14,8 +14,7 @@ class ButtonBoard : Line // X, Y, Size, Scale // maybe window
 {
 private:
 	short typeBot;
-	float scale;
-	float size;
+
 	int pressButton[2];
 	
 	sf::Font font;

@@ -15,7 +15,7 @@ ButtonOne::ButtonOne(float posX, float posY,float sizeB, float scaleB)
 	size = sizeB;
 	scale = scaleB;
 	button = sf::CircleShape{ size };
-
+	stan = 99;
 	// kolor przycisku
 	defaultColor = sf::Color(128,128,128);
 	color = defaultColor;
@@ -124,11 +124,6 @@ void ButtonOne::changeColor()
 
 	this->button.setFillColor(color);
 
-}
-
-void ButtonOne::updateObcjet()
-{
-	
 }
 
 
