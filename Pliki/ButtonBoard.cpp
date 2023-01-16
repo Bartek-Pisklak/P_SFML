@@ -204,7 +204,6 @@ void ButtonBoard::lineWin()
 
 							if (!checkPoint(linePlayer, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
 							{
-								cout << "i=" << i << "j=" << j << " <><> " << endl;
 							}
 							else if (!one && !checkPoint(I_WAS_HERE, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
 							{
@@ -243,6 +242,8 @@ void ButtonBoard::lineWin()
 	}
 
 	if (lineEnemy[0].x == 0 && lineEnemy.back().x == MUCHBUTTON - 1 || lineEnemy[0].y == 0 && lineEnemy.back().y == MUCHBUTTON - 1)
+		winEnemy = true;
+	if (checkPoint(lineEnemy, 0, 99) && checkPoint(lineEnemy, 23, 99) || checkPoint(lineEnemy, 99, 0) && checkPoint(lineEnemy, 99, 23))
 		winEnemy = true;
 }
 
@@ -311,13 +312,22 @@ void ButtonBoard::gameRun(bool& change, int i, int j)
 		sf::Vector2i beginLineEnemy;
 		sf::Vector2i endLineEnemy;
 
-		enemy.updateButtonBoardShadow(this->linePlayer, this->buttonBoard);
-		enemy.roadCreate(lineEnemy, beginLineEnemy, endLineEnemy);
+		try
+		{
+			enemy.updateButtonBoardShadow(this->linePlayer, this->buttonBoard);
+			enemy.roadCreate(lineEnemy, beginLineEnemy, endLineEnemy);
 
-		buttonBoard[beginLineEnemy.x][beginLineEnemy.y].setStan(0);
-		buttonBoard[endLineEnemy.x][endLineEnemy.y].setStan(0);
+			buttonBoard[beginLineEnemy.x][beginLineEnemy.y].setStan(0);
+			buttonBoard[endLineEnemy.x][endLineEnemy.y].setStan(0);
 
-		createLine(beginLineEnemy, endLineEnemy, lineEnemy);
+			createLine(beginLineEnemy, endLineEnemy, lineEnemy);
+		}
+		catch (out_of_range www)
+		{
+			cout << "przeciwnik zachorował poddaje sie" << endl;
+			winPlayer = true;
+		}
+
 
 	}
 }

@@ -15,14 +15,16 @@ Bot::Bot(std::vector <sf::Vector2i>& linePlayer, int typ)
 	{
 		whatBot = 1;
 		int where = rand() % MUCHBUTTON;
-		if(1)//if (rand() % 2 == 0)
+		while (checkPoint(linePlayer, 0, where))
 		{
-			lineEnemy.push_back(sf::Vector2i(0, where));
+			where = rand() % MUCHBUTTON;
+			if (!checkPoint(linePlayer, 0, where))
+			{
+				
+				break;
+			}
 		}
-		else
-		{
-			lineEnemy.push_back(sf::Vector2i(where, 0));
-		}
+		lineEnemy.push_back(sf::Vector2i(0, where));
 	}
 
 	this->linePlayer = linePlayer;
@@ -55,8 +57,8 @@ void Bot::roadCreate(std::vector<sf::Vector2i> lineEnemyCurrent, sf::Vector2i& b
 
 	createFastRoad(lineEnemy.back().x, lineEnemy.back().y);
 
-	begin = roadPoints[0];
-	end   = roadPoints[1];
+	begin = roadPoints.at(0);
+	end   = roadPoints.at(1);
 }
 
 void Bot::createFastRoad(int x,int y)
@@ -69,9 +71,12 @@ void Bot::createFastRoad(int x,int y)
 	int loop = 0;
 	bool WhatNOW = false;
 
+
 	while (lineEnemy[0].x == 0 && x != 23 || lineEnemy[0].y == 0 && y != 23 )
 	{
 		bool isInTable = false;
+
+		//std::cout << "Road" << isInTable << " " << x << "<>" << y << " " << loop <<"pierwsze"<< "\n";
 
 		if (whereGo[0])
 		{
@@ -89,20 +94,6 @@ void Bot::createFastRoad(int x,int y)
 		{
 			E_GO(isInTable, road, x, y);
 		}
-
-		//if (x == 0)
-		//{
-		//	road.clear();
-		//	if (LEFT_WAS)
-		//	{
-		//		start = left_or_right(false);
-		//		road.push_back(start);
-		//		x = start.x;
-		//		y = start.y;
-		//	}
-		//	if()
-
-		//}
 
 
 		if (y == 0)
@@ -124,7 +115,7 @@ void Bot::createFastRoad(int x,int y)
 			WhatNOW = true;
 			break;
 		}
-		std::cout << "Road"<<isInTable<<" "<< x << "<>" << y << " " << loop << "\n";
+		//std::cout << "Road"<<isInTable<<" "<< x << "<>" << y << " " << loop << "\n";
 
 	}
 
@@ -135,20 +126,22 @@ void Bot::createFastRoad(int x,int y)
 	if (WhatNOW)
 	{
 		bool x = false;
-		std::cout << "tutaj"<<LEFT_WAS<<" "<<RIGHT_WAS;
+		//std::cout << "tutaj"<<LEFT_WAS<<" "<<RIGHT_WAS;
 
 		if (LEFT_WAS && !checkPoint(lineEnemy,99, 0))
 		{
-			std::cout << "tutaj111";
-			start = road.back();
+			//std::cout << "tutaj111";
+			start = left_or_right(true);
 			road.clear();
+			road.push_back(start);
 			W_GO(x, road, start.x, start.y);
 		}
 		else if (RIGHT_WAS && !checkPoint(lineEnemy,99, 23))
 		{
-			std::cout << "tutaj111222";
-			start = road.back();
+			//std::cout << "tutaj111222";
+			start = left_or_right(false);
 			road.clear();
+			road.push_back(start);
 			E_GO(x, road, start.x, start.y);
 		}
 		else
@@ -157,29 +150,22 @@ void Bot::createFastRoad(int x,int y)
 
 			if (!LEFT_WAS)
 			{
-				std::cout << "tutaj22";
+			//	std::cout << "tutaj22";
 				start = left_or_right(true);
 				road.push_back(start);
 				W_GO(x, road, start.x, start.y);
 			}
 			else if (!RIGHT_WAS)
 			{
-				std::cout << "tutaj23";
+			//	std::cout << "tutaj23";
 				start = left_or_right(false);
 				road.push_back(start);
 				E_GO(x, road, start.x, start.y);
 			}
-			if (RIGHT_WAS)
-			{
-
-			}
 		}
-
-
-
 	}
 
-		roadPoints = road;
+	roadPoints = road;
 }
 
 void Bot::graf(bool& isInTable, std::vector <sf::Vector2i>& roadCopy, int& x, int& y, int zmiennaX, int zmiennaY)
