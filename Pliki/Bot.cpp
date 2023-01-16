@@ -8,7 +8,6 @@ Bot::Bot()
 
 Bot::Bot(std::vector <sf::Vector2i>& linePlayer, int typ)
 {
-	//pointBeRoadCopy = new std::vector < std::vector <sf::Vector2i>>  [8];
 
 	srand((unsigned)time(NULL));
 	
@@ -31,7 +30,6 @@ Bot::Bot(std::vector <sf::Vector2i>& linePlayer, int typ)
 
 Bot::~Bot()
 {
-	//delete[] pointBeRoadCopy;
 }
 
 void Bot::updateButtonBoardShadow(std::vector <sf::Vector2i>& linePlayer, ButtonOne buttonBoard[][MUCHBUTTON])
@@ -63,99 +61,128 @@ void Bot::roadCreate(std::vector<sf::Vector2i> lineEnemyCurrent, sf::Vector2i& b
 
 void Bot::createFastRoad(int x,int y)
 {
-	std::vector < std::vector <sf::Vector2i>> *pointBeRoad;
-	pointBeRoad = new std::vector < std::vector <sf::Vector2i>>[8];
-
-	bool whereGo[4] = {1,0,0,0};//S N W E
 
 	std::vector <sf::Vector2i> road;
 	road.push_back(sf::Vector2i(x, y));
 
-
-	int howMuchImustGoBack = 0;
+	sf::Vector2i start;
 	int loop = 0;
+	bool WhatNOW = false;
 
 	while (lineEnemy[0].x == 0 && x != 23 || lineEnemy[0].y == 0 && y != 23 )
 	{
-		bool wstawil = false;
+		bool isInTable = false;
 
 		if (whereGo[0])
 		{
-			for (int i = 0;i < 8;i++)
-			{
-				graf(wstawil, road, pointBeRoad[i], x, y, stepHorseNS[0][i], stepHorseNS[1][i]);
-			}
+			S_GO(isInTable,road,x,y);
 		}
 		else if (whereGo[1])
 		{
-			int k = 0;
-			for (int i = 8;i > 0;i--)
-			{
-				graf(wstawil, road, pointBeRoad[k], x, y, stepHorseNS[0][i], stepHorseNS[1][i]);
-				k++;
-			}
+			N_GO(isInTable, road, x, y);
 		}
 		else if (whereGo[2])
 		{
-			for (int i = 0;i < 8;i++)
-			{
-				graf(wstawil, road, pointBeRoad[i], x, y, stepHorseWE[0][i], stepHorseWE[1][i]);
-			}
+			W_GO(isInTable, road, x, y);
 		}
 		else if (whereGo[3])
 		{
-			int k = 0;
-			for (int i = 8;i > 0;i--)
-			{
-				graf(wstawil, road, pointBeRoad[k], x, y, stepHorseWE[0][i], stepHorseWE[1][i]);
-				k++;
-			}
+			E_GO(isInTable, road, x, y);
 		}
 
+		//if (x == 0)
+		//{
+		//	road.clear();
+		//	if (LEFT_WAS)
+		//	{
+		//		start = left_or_right(false);
+		//		road.push_back(start);
+		//		x = start.x;
+		//		y = start.y;
+		//	}
+		//	if()
 
-		if (!wstawil)
+		//}
+
+
+		if (y == 0)
+		{
+			LEFT_WAS = true;
+		}
+		if (y == MUCHBUTTON - 1)
+		{
+			RIGHT_WAS = true;
+		}
+
+		if (!isInTable )
 		{
 			loop++;
 		}
 
-		//if (loop > 4)
-		//{
-		//	for (int i = 0;i < 8;i++)
-		//	{
-		//		if (pointBeRoad[i].size() > 0)
-		//		{
-		//			road = pointBeRoad[i].back();
-		//			x = road.back().x;
-		//			y = road.back().y;
-		//			pointBeRoad[i].pop_back();
-		//			loop = 0;
-		//		}
+		if (loop > 10)
+		{
+			WhatNOW = true;
+			break;
+		}
+		std::cout << "Road"<<isInTable<<" "<< x << "<>" << y << " " << loop << "\n";
 
-		//	}
-		//}
-
-		std::cout << "Road"<<wstawil<<" "<< x << "<>" << y << " " << loop << "\n";
-
-		//if (loop > 10 && road.size() - ileMamDoCofania >= 0)
-		//{
-		//	loop = 0;
-		//	std::cout << "musze cofac \n";
-		//	ileMamDoCofania++;
-		//	x = road[road.size() - ileMamDoCofania].x;
-		//	y = road[road.size() - ileMamDoCofania].y;
-		//	road.pop_back();
-		//}
-		//lineEnemy.push_back(sf::Vector2i(x,y));
-		//std::cout << road.back().x<<"<>"<< road.back().y << "\n";
-		//lineEnemy.push_back(road.back());
 	}
 
-	roadPoints = road;
 
-	delete[] pointBeRoad;
+	sf::Vector2i helpL = left_or_right(true);
+	sf::Vector2i helpR = left_or_right(false);
+
+	if (WhatNOW)
+	{
+		bool x = false;
+		std::cout << "tutaj"<<LEFT_WAS<<" "<<RIGHT_WAS;
+
+		if (LEFT_WAS && !checkPoint(lineEnemy,99, 0))
+		{
+			std::cout << "tutaj111";
+			start = road.back();
+			road.clear();
+			W_GO(x, road, start.x, start.y);
+		}
+		else if (RIGHT_WAS && !checkPoint(lineEnemy,99, 23))
+		{
+			std::cout << "tutaj111222";
+			start = road.back();
+			road.clear();
+			E_GO(x, road, start.x, start.y);
+		}
+		else
+		{
+			road.clear();
+
+			if (!LEFT_WAS)
+			{
+				std::cout << "tutaj22";
+				start = left_or_right(true);
+				road.push_back(start);
+				W_GO(x, road, start.x, start.y);
+			}
+			else if (!RIGHT_WAS)
+			{
+				std::cout << "tutaj23";
+				start = left_or_right(false);
+				road.push_back(start);
+				E_GO(x, road, start.x, start.y);
+			}
+			if (RIGHT_WAS)
+			{
+
+			}
+		}
+
+
+
+	}
+
+		roadPoints = road;
 }
 
-void Bot::graf(bool& wstawil, std::vector <sf::Vector2i>& roadCopy, std::vector < std::vector <sf::Vector2i>>& pointBeRoad, int& x, int& y, int zmiennaX, int zmiennaY)
+void Bot::graf(bool& isInTable, std::vector <sf::Vector2i>& roadCopy, int& x, int& y, int zmiennaX, int zmiennaY)
 {
 	if (isDouble(roadCopy, x + zmiennaX, y + zmiennaY) == false)
 	{
@@ -165,25 +192,56 @@ void Bot::graf(bool& wstawil, std::vector <sf::Vector2i>& roadCopy, std::vector 
 			{
 				if (checkLine(sf::Vector2i(x, y), sf::Vector2i(x + zmiennaX, y + zmiennaY)) == false)
 				{
-					if (wstawil == false)
+					if (isInTable == false)
 					{
 						x += zmiennaX;
 						y += zmiennaY;
 						roadCopy.push_back(sf::Vector2i(x, y));
-						wstawil = true;
-					}
-					else
-					{
-						std::vector <sf::Vector2i> helpRoad;
-						helpRoad = roadCopy;
-						helpRoad.push_back(sf::Vector2i(x + zmiennaX, y + zmiennaY));
-						pointBeRoad.push_back(helpRoad);
+						isInTable = true;
 					}
 				}
 			}
 		}
 	}
 }
+
+void Bot::clearWhereGo()
+{
+}
+
+
+void Bot::S_GO(bool& isInTable, std::vector<sf::Vector2i>& roadCopy, int& x, int& y)
+{
+	for (int i = 0;i < 8;i++)
+	{
+		graf(isInTable, roadCopy, x, y, stepHorseNS[0][i], stepHorseNS[1][i]);
+	}
+}
+
+void Bot::N_GO(bool& isInTable, std::vector<sf::Vector2i>& roadCopy, int& x, int& y)
+{
+	for (int i = 7;i >= 0;i--)
+	{
+		graf(isInTable, roadCopy, x, y, stepHorseNS[0][i], stepHorseNS[1][i]);
+	}
+}
+
+void Bot::W_GO(bool& isInTable, std::vector<sf::Vector2i>& roadCopy, int& x, int& y)
+{
+	for (int i = 0;i < 8;i++)
+	{
+		graf(isInTable, roadCopy, x, y, stepHorseWE[0][i], stepHorseWE[1][i]);
+	}
+}
+
+void Bot::E_GO(bool& isInTable, std::vector<sf::Vector2i>& roadCopy, int& x, int& y)
+{
+	for (int i = 7;i >= 0;i--)
+	{
+		graf(isInTable, roadCopy, x, y, stepHorseWE[0][i], stepHorseWE[1][i]);
+	}
+}
+
 
 bool Bot::isDouble(std::vector<sf::Vector2i> roadCopy, int x, int y)
 {

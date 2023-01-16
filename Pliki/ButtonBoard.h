@@ -32,7 +32,6 @@ private:
 	void lineWin();
 	void lineDraw(sf::RenderWindow* window, std::vector <sf::Vector2i> line);
 	void gameRun(bool &change, int i , int j);
-	void sort(std::vector<sf::Vector2i> &line, bool xy);
 	void initText();
 	void whoWinCreateWin();
 

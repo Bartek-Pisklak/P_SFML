@@ -41,6 +41,75 @@ bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
 	return false;
 }
 
+sf::Vector2i Line::left_or_right(bool left)
+{
+	int x, y;
+	if (left)
+	{
+		x = lineEnemy[0].x;
+		y = lineEnemy[0].y;
+		for (int i = 1;i < lineEnemy.size();i++)
+		{
+			if (lineEnemy[i].y < y)
+			{
+				x = lineEnemy[i].x;
+				y = lineEnemy[i].y;
+			}
+		}
+	}
+	else
+	{
+		x = lineEnemy[0].x;
+		y = lineEnemy[0].y;
+		for (int i = 0; i < lineEnemy.size();i++)
+		{
+			if (lineEnemy[i].y > y)
+			{
+				x = lineEnemy[i].x;
+				y = lineEnemy[i].y;
+			}
+		}
+	}
+	return sf::Vector2i(x,y);
+}
+
+
+bool Line::checkPoint(std::vector<sf::Vector2i>& line, int x, int y)
+{
+	if (y == 99)
+	{
+		for (int i = 0;i < line.size();i++)
+		{
+			if (x == line[i].x)
+			{
+				return true;
+			}
+		}
+	}
+	else if (x == 99)
+	{
+		for (int i = 0;i < line.size();i++)
+		{
+			if (y == line[i].y)
+			{
+				return true;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0;i < line.size();i++)
+		{
+			if (x == line[i].x && y == line[i].y)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
 float Line::vector_product(sf::Vector2i X, sf::Vector2i Y, sf::Vector2i Z)
 {
 	float x1 = Z.x - X.x;

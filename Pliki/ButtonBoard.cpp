@@ -65,38 +65,17 @@ void ButtonBoard::updateButtonBoard(sf::Vector2f mousePosView)
 					if (buttonBoard[i][j].getButton().getGlobalBounds().contains(mousePosView) && buttonBoard[i][j].getLock() == 0)
 					{
 						gameRun(change, i, j);
+						if (linePlayer.size() > 20)
+						{
+							lineWin();
+						}
+
 						break;
 					}
 				}
 			}
 		}
-		//	sprawdzanie stanow
-		//if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		//{
-		//	cout << "<><>" << change << endl;
-		//	for (int i = 0;i < MUCHBUTTON;i++)
-		//	{
-		//		for (int j = 0;j < MUCHBUTTON;j++)
-		//		{
-		//			cout << buttonBoard[i][j].getLock();
-		//		}
-		//		cout << endl;
-		//	}
-		//	for (int i = 0;i < MUCHBUTTON;i++)
-		//	{
-		//		for (int j = 0;j < MUCHBUTTON;j++)
-		//		{
-		//			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		//			{
-		//				if (buttonBoard[i][j].getButton().getGlobalBounds().contains(mousePosView))
-		//				{
-		//					cout <<">A "<< buttonBoard[i][j].getActive() << ">P " << buttonBoard[i][j].getPlayer() << ">S " << buttonBoard[i][j].getStan() << endl;
-		//				}
-		//			}
-		//		}
-		//	}
-		//}
-		// 
+
 		// lockowanie przyciskow
 		if (change)
 		{
@@ -116,12 +95,11 @@ void ButtonBoard::updateButtonBoard(sf::Vector2f mousePosView)
 			}
 		}
 	}
-
 }
 
-void ButtonBoard::setActiveButton(int x,int y , int a, int b) // i, j, gdzie gora, gdzie lewo 
+void ButtonBoard::setActiveButton(int x, int y, int a, int b) // i, j, gdzie gora, gdzie lewo 
 {
-	if ((x - a) >= 0 && (x-a) < MUCHBUTTON)
+	if ((x - a) >= 0 && (x - a) < MUCHBUTTON)
 	{
 		if ((y - b) >= 0)
 		{
@@ -153,46 +131,115 @@ void ButtonBoard::drawButtonBoard(sf::RenderWindow* window)
 			window->draw(buttonBoard[i][j].getButton());
 			buttonBoard[i][j].changeColor();
 		}
-	}	
+	}
 
 	lineDraw(window, linePlayer);
 	lineDraw(window, lineEnemy);
 
 	if (winPlayer || winEnemy)
 	{
+		whoWinCreateWin();
 		window->draw(textWin);
 	}
 
-	if (lineEnemy.size() > 10)
-	{
-		whoWinCreateWin();
-
-		if (!winPlayer && !winEnemy)
-			if (lineEnemy.size() > 10)
-				lineWin();
-	}
 }
 
 
 
 void ButtonBoard::lineWin()
 {
-	bool tableTrue[MUCHBUTTON];
-	int numberX = 0;
-	int mumberY = 0;
+	if (checkPoint(linePlayer, 0, 99) && checkPoint(linePlayer, 23, 99) || checkPoint(linePlayer, 99, 0) && checkPoint(linePlayer, 99, 23))
+	{
+		std::vector<sf::Vector2i> start;
+		if (checkPoint(linePlayer, 0, 99))
+		{
+			for (int i = 0;i < linePlayer.size();i++)
+			{
+				if (linePlayer[i].x == 0)
+				{
+					start.push_back(linePlayer[i]);
+				}
+			}
+		}
+		if (checkPoint(linePlayer, 99, 0))
+		{
+			for (int i = 0;i < linePlayer.size();i++)
+			{
+				if (linePlayer[i].y == 0)
+				{
+					start.push_back(linePlayer[i]);
+				}
+			}
+		}
 
-	//sort(linePlayer, true);
-	//for (int i = 0;i < linePlayer.size() && linePlayer[0].x == 0;i++)
-	//{
-	//	cout << "x" << linePlayer[i].x;	
-	//}
-	//sort(linePlayer, false);
-	//for (int i = 0;i < linePlayer.size() && linePlayer[0].y == 0;i++)
-	//{
-	//}
+		int stepHorse[2][8] = { { 2,2,1,1,-1,-1,-2,-2 },{-1, 1, -2, 2, -2, 2, -1, 1} };
+		sf::Vector2i search;
+		std::vector<sf::Vector2i> searchBack;
+		std::vector<sf::Vector2i> endSearch;
+		std::vector<sf::Vector2i> I_WAS_HERE;
 
-	if (numberX >=  13 || mumberY >= 13)
-		winPlayer = true;
+		int kh = 0;
+		for (int k = 0;k < start.size() || kh < searchBack.size();k++)
+		{
+			if (k < start.size())
+			{
+				search = start[k];
+			}
+			else
+			{
+				search = searchBack[kh];
+				kh++;
+			}
+
+			for (int i = 0;i < linePlayer.size();i++)
+			{
+				bool one = false;
+				for (int j = 0;j < 8;j++)
+				{
+					if (search.x + stepHorse[0][j] > 0 && search.x + stepHorse[0][j] < MUCHBUTTON)
+					{
+						if (search.y + stepHorse[1][j] > 0 && search.y + stepHorse[1][j] < MUCHBUTTON)
+						{
+
+							if (!checkPoint(linePlayer, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
+							{
+								cout << "i=" << i << "j=" << j << " <><> " << endl;
+							}
+							else if (!one && !checkPoint(I_WAS_HERE, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
+							{
+								I_WAS_HERE.push_back(search);
+								search.x += stepHorse[0][j];
+								search.y += stepHorse[1][j];
+								one = true;
+
+							}
+							else if (one && !checkPoint(I_WAS_HERE, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
+							{
+								searchBack.push_back(sf::Vector2i(search.x + stepHorse[0][j], search.y + stepHorse[1][j]));
+							}
+						}
+					}
+				}
+			}
+			for (int c = 0;c < searchBack.size();c++)
+			{
+				if (checkPoint(I_WAS_HERE, searchBack[c].x, searchBack[c].y))
+				{
+					searchBack.erase(searchBack.begin() + c);
+				}
+			}
+			endSearch.push_back(search);
+
+			for (int e = 0;e < endSearch.size();e++)
+			{
+				if (endSearch[e].x == 23 || endSearch[e].y == 23)
+				{
+					winPlayer = true;
+					return;
+				}
+			}
+		}
+	}
 
 	if (lineEnemy[0].x == 0 && lineEnemy.back().x == MUCHBUTTON - 1 || lineEnemy[0].y == 0 && lineEnemy.back().y == MUCHBUTTON - 1)
 		winEnemy = true;
@@ -274,48 +321,6 @@ void ButtonBoard::gameRun(bool& change, int i, int j)
 	}
 }
 
-void ButtonBoard::sort(std::vector<sf::Vector2i>& line, bool xy)
-{
-	int j;
-	sf::Vector2i pom,pomY;
-
-	if (xy)
-	{
-		for (int i = 2; i < line.size(); i+=2)
-		{
-			pom = line[i];
-			pomY = line[i + 1];
-			j = i - 2;
-
-			while (j >= 0 && line[j].x > pom.x)
-			{
-				line[j + 2] = line[j];
-				line[j + 3] = line[j + 1];
-				j-=2;
-			}
-			line[j + 2] = pom;
-			line[j + 3] = pomY;
-		}
-	}
-	else
-	{
-		for (int i = 0; i < line.size(); i++)
-		{
-			pom = line[i];
-			pomY = line[i + 1];
-			j = i - 2;
-
-			while (j >= 0 && line[j].y > pom.y)
-			{
-				line[j + 2] = line[j];
-				line[j + 3] = line[j + 1];
-				j -= 2;
-			}
-			line[j + 2] = pom;
-			line[j + 3] = pomY;
-		}
-	}
-}
 
 
 void ButtonBoard::initText()
