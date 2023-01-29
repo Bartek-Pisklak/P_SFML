@@ -15,7 +15,7 @@ ButtonOne::ButtonOne(float posX, float posY,float sizeB, float scaleB)
 	size = sizeB;
 	scale = scaleB;
 	button = sf::CircleShape{ size };
-
+	stan = 99;
 	// kolor przycisku
 	defaultColor = sf::Color(128,128,128);
 	color = defaultColor;
@@ -47,13 +47,14 @@ void ButtonOne::initObcject()
 	this->button.setPosition(this->centerX,this->centerY);
 	this->button.setScale(sf::Vector2f(this->scale, this->scale));
 	this->button.setFillColor(defaultColor);
-	this->button.setOutlineColor(sf::Color::Transparent); // maybe kolor tła
+	this->button.setOutlineColor(sf::Color::Transparent); 
 	button.setOutlineThickness(2);
 }
 
 
 ButtonOne::~ButtonOne()
 {
+	this->button.setOutlineColor(sf::Color::Transparent);
 	active = false;
 	press = false;
 	isPlayer = false;
@@ -125,11 +126,6 @@ void ButtonOne::changeColor()
 
 }
 
-void ButtonOne::updateObcjet()
-{
-	
-}
-
 
 void ButtonOne::setLock(bool whatLock)
 {
@@ -148,8 +144,6 @@ void ButtonOne::setLock(bool whatLock)
 			isLock = false;
 		}
 	}
-
-
 	if (isEnemy)
 		isLock = true;
 }
@@ -166,7 +160,6 @@ void ButtonOne::setStan(int nowy)
 
 	if (!isLock)
 	{
-		// breakuje graczy
 		if (!press && !active)
 		{
 			stan = nowy;
@@ -205,20 +198,15 @@ bool ButtonOne::getEnemy()
 	return isEnemy;
 }
 
-
-
 sf::Color ButtonOne::getColor()
 {
 	return color;
 }
 
-
-
 short ButtonOne::getStan()
 {
 	return stan;
 }
-
 
 bool ButtonOne::getLock() const
 {

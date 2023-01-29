@@ -7,40 +7,44 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
-#include "Plansza.h"
+#include "ButtonBoard.h"
 
 class Game
 {
 private:
-	// variable
-	// window
+
 	sf::RenderWindow* window;
 	sf::Event ev;
 	sf::VideoMode videoMode;
-
 	sf::Color colorbackground;
 
+	short typeBot;
 	// Game obcjets	
-	Plansza plansza;
-
-
+	ButtonBoard buttonBoard{};
 
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 
+
+	sf::Font font;
+	sf::RectangleShape buttonRestart;
+	sf::RectangleShape buttonClose;
+	sf::Text textButtonRestart;
+	sf::Text textButtonClose;
+
 	void initializeVariebles();
 	void initWindow();
 
-public:
+	void initButton();
+	void drawButton();
+	void clickButtonMenu();
 
-	void drawPlansza();
+public:
 
 	void pollEvents();
 	void update();
 	void render();
 	void updateMousePosition();
-
-
 
 	// Accessors
 	const bool running() const;

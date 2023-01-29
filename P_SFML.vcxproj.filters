@@ -24,7 +24,7 @@
     <ClInclude Include="Pliki\Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pliki\Plansza.h">
+    <ClInclude Include="Pliki\ButtonBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pliki\Bot.h">
@@ -47,10 +47,7 @@
     <ClCompile Include="Pliki\Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pliki\Plansza.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Trash_Maybe.cpp">
+    <ClCompile Include="Pliki\ButtonBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Pliki\Bot.cpp">

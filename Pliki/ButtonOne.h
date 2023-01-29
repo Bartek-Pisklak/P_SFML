@@ -28,7 +28,7 @@ private:
 	bool isEnemy;
 	bool isLock;
 
-	short stan= 99;
+	short stan;
 
 	// kolor
 	sf::Color color;
@@ -52,7 +52,7 @@ public:
 
 	//dla dzialania obiektu
 
-	void setLock(bool whatLock=false);
+	void setLock(bool locking);
 	void setStan(int nowy);
 
 	short getStan();
