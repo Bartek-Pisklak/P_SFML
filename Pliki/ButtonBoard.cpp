@@ -66,10 +66,7 @@ void ButtonBoard::updateButtonBoard(sf::Vector2f mousePosView)
 					if (buttonBoard[i][j].getButton().getGlobalBounds().contains(mousePosView) && buttonBoard[i][j].getLock() == 0)
 					{
 						gameRun(change, i, j);
-						if (linePlayer.size() > 20)
-						{
-							lineWin();
-						}
+						lineWin();
 
 						break;
 					}
@@ -151,29 +148,27 @@ void ButtonBoard::lineWin()
 {
 	if (typeBot == 1)
 	{
-		if (lineWin_VertivalHorizontal(linePlayer))
-		{
-			winPlayer = true;
-			return;
-		}
-		else if (lineWin_TwoWall(linePlayer))
+		if (lineWin_VertivalHorizontal(linePlayer) || lineWin_TwoWall(linePlayer))
 		{
 			winPlayer = true;
 			return;
 		}
 
-		if (lineEnemy[0].x == 0 && lineEnemy.back().x == MUCHBUTTON - 1 || lineEnemy[0].y == 0 && lineEnemy.back().y == MUCHBUTTON - 1)
-			winEnemy = true;
-		if (checkPoint(lineEnemy, 0, 99) && checkPoint(lineEnemy, 23, 99) || checkPoint(lineEnemy, 99, 0) && checkPoint(lineEnemy, 99, 23))
-			winEnemy = true;
+		if (lineEnemy.size() > 20)
+		{
+			if (lineEnemy[0].x == 0 && lineEnemy.back().x == MUCHBUTTON - 1 || lineEnemy[0].y == 0 && lineEnemy.back().y == MUCHBUTTON - 1)
+				winEnemy = true;
+			if (checkPoint(lineEnemy, 0, 99) && checkPoint(lineEnemy, 23, 99) || checkPoint(lineEnemy, 99, 0) && checkPoint(lineEnemy, 99, 23))
+				winEnemy = true;
+		}
 	}
 	else if (typeBot == 2)
 	{
-		if (lineWin_VertivalHorizontal(linePlayer))
+		if (lineWin_VertivalHorizontal(linePlayer) || lineWin_TwoWall(linePlayer))
 		{
 
 		}
-		if (lineWin_VertivalHorizontal(lineEnemy))
+		if (lineWin_VertivalHorizontal(lineEnemy) || lineWin_TwoWall(lineEnemy))
 		{
 
 		}
@@ -245,21 +240,19 @@ void ButtonBoard::gameRun(bool& change, int i, int j)
 		sf::Vector2i beginLineEnemy;
 		sf::Vector2i endLineEnemy;
 
-		try
-		{
-			enemy.updateButtonBoardShadow(this->linePlayer, this->buttonBoard);
-			enemy.roadCreate(lineEnemy, beginLineEnemy, endLineEnemy);
-
-			buttonBoard[beginLineEnemy.x][beginLineEnemy.y].setStan(0);
-			buttonBoard[endLineEnemy.x][endLineEnemy.y].setStan(0);
-
-			createLine(beginLineEnemy, endLineEnemy, lineEnemy);
-		}
-		catch (out_of_range www)
-		{
-			cout << "przeciwnik zachorował poddaje sie" << endl;
-			winPlayer = true;
-		}
+		//try
+		//{
+		//	enemy.updateButtonBoardShadow(this->linePlayer, this->buttonBoard);
+		//	enemy.roadCreate(lineEnemy, beginLineEnemy, endLineEnemy);
+		//	buttonBoard[beginLineEnemy.x][beginLineEnemy.y].setStan(0);
+		//	buttonBoard[endLineEnemy.x][endLineEnemy.y].setStan(0);
+		//	createLine(beginLineEnemy, endLineEnemy, lineEnemy);
+		//}
+		//catch (out_of_range www)
+		//{
+		//	cout << "przeciwnik zachorował poddaje sie (powod algorytm sie wywalil bota)" << endl;
+		//	winPlayer = true;
+		//}
 
 
 	}
@@ -293,6 +286,7 @@ void ButtonBoard::whoWinCreateWin()
 
 bool ButtonBoard::lineWin_VertivalHorizontal(std::vector <sf::Vector2i> line)
 {
+	cout << "horizotal vertical " << endl;
 	if (checkPoint(line, 0, 99) && checkPoint(line, 23, 99) || checkPoint(line, 99, 0) && checkPoint(line, 99, 23))
 	{
 		std::vector<sf::Vector2i> start;
@@ -339,7 +333,6 @@ bool ButtonBoard::lineWin_VertivalHorizontal(std::vector <sf::Vector2i> line)
 
 			for (int i = 0;i < line.size();i++)
 			{
-				cout << i <<"<><>"<<search.x << " " << search.y << endl;
 				bool one = false;
 				for (int j = 0;j < 8;j++)
 				{
@@ -378,7 +371,11 @@ bool ButtonBoard::lineWin_VertivalHorizontal(std::vector <sf::Vector2i> line)
 
 			for (int e = 0;e < endSearch.size();e++)
 			{
-				if (endSearch[e].x == MUCHBUTTON-1 || endSearch[e].y == MUCHBUTTON - 1 || endSearch[e].x == 0 || endSearch[e].y ==0 )
+				if (endSearch[e].x == MUCHBUTTON - 1 || endSearch[e].y == MUCHBUTTON - 1)
+				{
+					return true;
+				}
+				if (endSearch[e].x == 0 && checkPoint(line, 23, 99) || endSearch[e].y == 0 && checkPoint(line, 99, 23)	)
 				{
 					return true;
 				}
@@ -390,9 +387,102 @@ bool ButtonBoard::lineWin_VertivalHorizontal(std::vector <sf::Vector2i> line)
 
 bool ButtonBoard::lineWin_TwoWall(std::vector <sf::Vector2i> line)
 {
+	cout << "two wall" << endl;
+	if ((checkPoint(line, 0, 99) && checkPoint(line, 99, MUCHBUTTON - 1)) || (checkPoint(line, 0, 99) && checkPoint(line,99,0)) || (checkPoint(line, MUCHBUTTON - 1, 99) && checkPoint(line, 99, 0)) || (checkPoint(line, MUCHBUTTON - 1, 99) && checkPoint(line, 99, MUCHBUTTON - 1)))
+	{
+		cout << "utta" << endl;
+		std::vector<sf::Vector2i> start;
+		if (checkPoint(line, 0, 99))
+		{
+			for (int i = 0;i < line.size();i++)
+			{
+				if (line[i].x == 0)
+				{
+					start.push_back(line[i]);
+				}
+			}
+		}
+		if (checkPoint(line, 23, 99))
+		{
+			for (int i = 0;i < line.size();i++)
+			{
+				if (line[i].x == MUCHBUTTON-1)
+				{
+					start.push_back(line[i]);
+				}
+			}
+		}
+
+		int stepHorse[2][8] = { { 2,2,1,1,-1,-1,-2,-2 },{-1, 1, -2, 2, -2, 2, -1, 1} };
+		sf::Vector2i search;
+		std::vector<sf::Vector2i> searchBack;
+		std::vector<sf::Vector2i> endSearch;
+		std::vector<sf::Vector2i> I_WAS_HERE;
+
+		int kh = 0;
+		for (int k = 0;k < start.size() || kh < searchBack.size();k++)
+		{
+			if (k < start.size())
+			{
+				search = start[k];
+			}
+			else
+			{
+				search = searchBack[kh];
+				kh++;
+			}
+
+			for (int i = 0;i < line.size();i++)
+			{
+				bool one = false;
+				for (int j = 0;j < 8;j++)
+				{
+					if (search.x + stepHorse[0][j] >= 0 && search.x + stepHorse[0][j] < MUCHBUTTON)
+					{
+						if (search.y + stepHorse[1][j] >= 0 && search.y + stepHorse[1][j] < MUCHBUTTON)
+						{
+
+							if (!checkPoint(line, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
+							{
+							}
+							else if (!one && !checkPoint(I_WAS_HERE, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
+							{
+								I_WAS_HERE.push_back(search);
+								search.x += stepHorse[0][j];
+								search.y += stepHorse[1][j];
+								one = true;
+
+							}
+							else if (one && !checkPoint(I_WAS_HERE, search.x + stepHorse[0][j], search.y + stepHorse[1][j]))
+							{
+								searchBack.push_back(sf::Vector2i(search.x + stepHorse[0][j], search.y + stepHorse[1][j]));
+							}
+						}
+					}
+				}
+			}
+			for (int c = 0;c < searchBack.size();c++)
+			{
+				if (checkPoint(I_WAS_HERE, searchBack[c].x, searchBack[c].y))
+				{
+					searchBack.erase(searchBack.begin() + c);
+				}
+			}
+			endSearch.push_back(search);
+
+			for (int e = 0;e < endSearch.size();e++)
+			{
+				if ((endSearch[e].x == MUCHBUTTON - 1 && checkPoint(line,99,0)) || (endSearch[e].x == MUCHBUTTON - 1 && checkPoint(line, 99, MUCHBUTTON - 1)) 
+				|| (endSearch[e].y == 0 && checkPoint(line, 0, 99)) || (endSearch[e].y == 0  && checkPoint(line, MUCHBUTTON-1, 99))	
+				|| (endSearch[e].y == MUCHBUTTON-1 && checkPoint(line, 0, 99)) || (endSearch[e].y == MUCHBUTTON - 1 && checkPoint(line, MUCHBUTTON-1, 99))		)
+				{
+					return true;
+				}
+			}
+		}
 
 
-
+	}
 	return false;
 }
 
