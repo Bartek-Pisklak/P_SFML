@@ -34,6 +34,8 @@ private:
 	void initText();
 	void whoWinCreateWin();
 
+	bool lineWin_VertivalHorizontal(std::vector <sf::Vector2i> line);
+	bool lineWin_TwoWall(std::vector <sf::Vector2i> line);
 public:
 
 	void updateButtonBoard(sf::Vector2f mousePosView);
