@@ -43,7 +43,6 @@ public:
 	// dla obiektu
 	void initObcject();
 	void changeColor();
-	void updateObcjet();
 
 	sf::CircleShape getButton();
 

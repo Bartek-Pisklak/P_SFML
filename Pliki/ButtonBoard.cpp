@@ -156,8 +156,6 @@ void ButtonBoard::lineWin()
 
 		if (lineEnemy.size() > 20)
 		{
-			if (lineEnemy[0].x == 0 && lineEnemy.back().x == MUCHBUTTON - 1 || lineEnemy[0].y == 0 && lineEnemy.back().y == MUCHBUTTON - 1)
-				winEnemy = true;
 			if (checkPoint(lineEnemy, 0, 99) && checkPoint(lineEnemy, 23, 99) || checkPoint(lineEnemy, 99, 0) && checkPoint(lineEnemy, 99, 23))
 				winEnemy = true;
 		}
@@ -226,7 +224,7 @@ void ButtonBoard::gameRun(bool& change, int i, int j)
 	}
 	else if (buttonBoard[i][j].getActive() && klik)
 	{
-		if (checkLine(sf::Vector2i(i, j), sf::Vector2i(pressButton[0], pressButton[1])))
+		if (checkLine(sf::Vector2i(i, j), sf::Vector2i(pressButton[0], pressButton[1]),linePlayer))
 			return;
 
 		change = true;
@@ -240,19 +238,19 @@ void ButtonBoard::gameRun(bool& change, int i, int j)
 		sf::Vector2i beginLineEnemy;
 		sf::Vector2i endLineEnemy;
 
-		//try
-		//{
-		//	enemy.updateButtonBoardShadow(this->linePlayer, this->buttonBoard);
-		//	enemy.roadCreate(lineEnemy, beginLineEnemy, endLineEnemy);
-		//	buttonBoard[beginLineEnemy.x][beginLineEnemy.y].setStan(0);
-		//	buttonBoard[endLineEnemy.x][endLineEnemy.y].setStan(0);
-		//	createLine(beginLineEnemy, endLineEnemy, lineEnemy);
-		//}
-		//catch (out_of_range www)
-		//{
-		//	cout << "przeciwnik zachorował poddaje sie (powod algorytm sie wywalil bota)" << endl;
-		//	winPlayer = true;
-		//}
+		try
+		{
+			enemy.updateButtonBoardShadow(this->linePlayer, this->buttonBoard);
+			enemy.roadCreate(lineEnemy, beginLineEnemy, endLineEnemy);
+			buttonBoard[beginLineEnemy.x][beginLineEnemy.y].setStan(0);
+			buttonBoard[endLineEnemy.x][endLineEnemy.y].setStan(0);
+			createLine(beginLineEnemy, endLineEnemy, lineEnemy);
+		}
+		catch (out_of_range www)
+		{
+			cout << "przeciwnik zachorował poddaje sie (powod algorytm sie wywalil bota)" << endl;
+			winPlayer = true;
+		}
 
 
 	}
@@ -286,7 +284,6 @@ void ButtonBoard::whoWinCreateWin()
 
 bool ButtonBoard::lineWin_VertivalHorizontal(std::vector <sf::Vector2i> line)
 {
-	cout << "horizotal vertical " << endl;
 	if (checkPoint(line, 0, 99) && checkPoint(line, 23, 99) || checkPoint(line, 99, 0) && checkPoint(line, 99, 23))
 	{
 		std::vector<sf::Vector2i> start;
@@ -387,10 +384,12 @@ bool ButtonBoard::lineWin_VertivalHorizontal(std::vector <sf::Vector2i> line)
 
 bool ButtonBoard::lineWin_TwoWall(std::vector <sf::Vector2i> line)
 {
-	cout << "two wall" << endl;
+	if (line.size() / 2 < 7)
+	{
+		return false;
+	}
 	if ((checkPoint(line, 0, 99) && checkPoint(line, 99, MUCHBUTTON - 1)) || (checkPoint(line, 0, 99) && checkPoint(line,99,0)) || (checkPoint(line, MUCHBUTTON - 1, 99) && checkPoint(line, 99, 0)) || (checkPoint(line, MUCHBUTTON - 1, 99) && checkPoint(line, 99, MUCHBUTTON - 1)))
 	{
-		cout << "utta" << endl;
 		std::vector<sf::Vector2i> start;
 		if (checkPoint(line, 0, 99))
 		{
@@ -472,9 +471,126 @@ bool ButtonBoard::lineWin_TwoWall(std::vector <sf::Vector2i> line)
 
 			for (int e = 0;e < endSearch.size();e++)
 			{
-				if ((endSearch[e].x == MUCHBUTTON - 1 && checkPoint(line,99,0)) || (endSearch[e].x == MUCHBUTTON - 1 && checkPoint(line, 99, MUCHBUTTON - 1)) 
-				|| (endSearch[e].y == 0 && checkPoint(line, 0, 99)) || (endSearch[e].y == 0  && checkPoint(line, MUCHBUTTON-1, 99))	
-				|| (endSearch[e].y == MUCHBUTTON-1 && checkPoint(line, 0, 99)) || (endSearch[e].y == MUCHBUTTON - 1 && checkPoint(line, MUCHBUTTON-1, 99))		)
+				int pktEnemy = 0;
+				sf::Vector2i cube = endSearch[e];
+				bool pageL_R = true;
+
+				if (endSearch[e].y == 0 && checkPoint(line, 0, 99)) //L G
+				{
+					sf::Vector2i go = cube;
+					go.x--;
+					while (buttonBoard[0][go.y].getPlayer() == false)
+					{
+						if (buttonBoard[go.x][go.y].getEnemy() == true)
+						{
+							pktEnemy++;
+						}
+
+						if (go.x == 0  || cube.x == go.x && pageL_R == false)
+						{
+							pageL_R = !pageL_R;
+							go.y++;
+						}
+
+						if (pageL_R)
+						{
+							go.x--;
+						}
+						else
+						{
+							go.x++;
+						}
+					}
+				}
+				else if (endSearch[e].y == 0 && checkPoint(line, MUCHBUTTON - 1, 99)) // L D
+				{
+					sf::Vector2i go = cube;
+					go.x++;
+					pageL_R = false;
+
+					while (buttonBoard[MUCHBUTTON-1][go.y].getPlayer() == false)
+					{
+						if (buttonBoard[go.x][go.y].getEnemy() == true)
+						{
+							pktEnemy++;
+						}
+
+						if (go.x == MUCHBUTTON-1 || cube.x == go.x && pageL_R == true)
+						{
+							pageL_R = !pageL_R;
+							go.y++;
+						}
+
+						if (pageL_R)
+						{
+							go.x--;
+						}
+						else
+						{
+							go.x++;
+						}
+					}
+				}
+				else if (endSearch[e].y == MUCHBUTTON - 1 && checkPoint(line, 0, 99)) // G P
+				{
+					sf::Vector2i go = cube;
+					go.x--;
+
+					while (buttonBoard[0][go.y].getPlayer() == false)
+					{
+						if (buttonBoard[go.x][go.y].getEnemy() == true)
+						{
+							pktEnemy++;
+						}
+
+						if (go.x == 0 || cube.x == go.x && pageL_R == false)
+						{
+							pageL_R = !pageL_R;
+							go.y--;
+						}
+
+						if (pageL_R)
+						{
+							go.x--;
+						}
+						else
+						{
+							go.x++;
+						}
+					}
+				}
+				else if (endSearch[e].y == MUCHBUTTON - 1 && checkPoint(line, MUCHBUTTON-1, 99)) // D P
+				{
+					sf::Vector2i go = cube;
+					go.x++;
+					pageL_R = false;
+
+					while (buttonBoard[MUCHBUTTON - 1][go.y].getPlayer() == false)
+					{
+						cout << go.x << " " << go.y << endl;
+						if (buttonBoard[go.x][go.y].getEnemy() == true)
+						{
+							pktEnemy++;
+						}
+
+						if (go.x == MUCHBUTTON - 1 || cube.x == go.x && pageL_R == true)
+						{
+							pageL_R = !pageL_R;
+							go.y--;
+						}
+
+						if (pageL_R)
+						{
+							go.x--;
+						}
+						else
+						{
+							go.x++;
+						}
+					}
+				}
+
+				if (pktEnemy >= lineEnemy.size() / 3)
 				{
 					return true;
 				}

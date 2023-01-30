@@ -20,7 +20,7 @@ class Line
 public:
 
 	void createLine(sf::Vector2i A, sf::Vector2i B, std::vector <sf::Vector2i>& linia);
-	bool checkLine(sf::Vector2i first, sf::Vector2i second);
+	bool checkLine(sf::Vector2i first, sf::Vector2i second , std::vector<sf::Vector2i>);
 	sf::Vector2i left_or_right(bool left=true);
 	bool checkPoint( std::vector <sf::Vector2i>& linia, int x = 99, int y = 99 );
 };

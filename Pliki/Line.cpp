@@ -1,12 +1,12 @@
 #include "Line.h"
 
-bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
+bool Line::checkLine(sf::Vector2i A, sf::Vector2i B , std::vector<sf::Vector2i> line)
 {
 
-	for (int i = 0;i < linePlayer.size();i += 2)
+	for (int i = 0;i < line.size() && line.size()>2 ;i += 2)
 	{
-		sf::Vector2i C = linePlayer[i];
-		sf::Vector2i D = linePlayer[1 + i];
+		sf::Vector2i C = line[i];
+		sf::Vector2i D = line[1 + i];
 
 		float	v1 = vector_product(C, D, A);
 		float	v2 = vector_product(C, D, B);
@@ -22,22 +22,6 @@ bool Line::checkLine(sf::Vector2i A, sf::Vector2i B)
 		}
 	}
 
-	for (int i = 0;i < lineEnemy.size() && lineEnemy.size() >= 2;i += 2)
-	{
-		sf::Vector2i C = lineEnemy[i];
-		sf::Vector2i D = lineEnemy[1 + i];
-
-		float	v1 = vector_product(C, D, A);
-		float	v2 = vector_product(C, D, B);
-		float	v3 = vector_product(A, B, C);
-		float	v4 = vector_product(A, B, D);
-
-		if (v1 * v2 < 0 && v3 * v4 < 0)
-			return true;
-
-		if (A == C && B == D || A == D && B == C)
-			return true;
-	}
 	return false;
 }
 
